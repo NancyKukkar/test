@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sunrise International - OTP Verification</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2fa;
+      margin: 0;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      background: white;
+      padding: 30px 40px;
+      max-width: 650px;
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .logo {
+      text-align: right;
+      margin-bottom: 10px;
+    }
+
+    .logo img {
+      max-height: 60px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    p {
+      text-align: center;
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 25px;
+    }
+
+    .form-field {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .inline-fields {
+      display: flex;
+      gap: 20px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #secure-link {
+      display: none;
+      margin-top: 20px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    #secure-link a {
+      text-decoration: none;
+      color: #007BFF;
+    }
+
+    #secure-link a:hover {
+      text-decoration: underline;
+    }
+
+    #otp-container {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <img src="logo-2.png" alt="Sunrise International">
+    </div>
+
+    <h2>Initial Assessment Form</h2>
+    <p>Please complete the form and verify your phone number before continuing.</p>
+
+    <form id="user-form">
+      <div class="form-field inline-fields">
+        <div style="flex: 1;">
+          <label for="first-name">First Name *</label>
+          <input type="text" id="first-name" name="first-name" required>
+        </div>
+        <div style="flex: 1;">
+          <label for="last-name">Last Name *</label>
+          <input type="text" id="last-name" name="last-name" required>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="email">Email *</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+
+      <div class="form-field">
+        <label for="mobile">Phone Number *</label>
+        <input type="tel" id="mobile" name="mobile" placeholder="+91XXXXXXXXXX" required>
+      </div>
+
+      <button type="button" onclick="startOTP()">Send OTP</button>
+
+      <!-- MSG91 widget container -->
+      <div id="otp-container"></div>
+    </form>
+
+    <div id="secure-link">
+      ✅ OTP verified. <a href="https://your-jotform-link.com" target="_blank">Proceed to the form</a>
+    </div>
+  </div>
+
+  <!-- MSG91 OTP Script -->
+  <script type="text/javascript" src="https://verify.msg91.com/otp-provider.js"></script>
+
+  <script type="text/javascript">
+    function startOTP() {
+      const phone = document.getElementById("mobile").value;
+
+      if (!phone) {
+        alert("Please enter a phone number first.");
+        return;
+      }
+
+      const configuration = {
+        widgetId: "356671686146313732373835", // Replace with your real Widget ID
+        tokenAuth: "456480TtBZ66mMu68512194P1",     // Replace with your real Token
+        identifier: phone,
+        exposeMethods: true,
+        containerId: "otp-container", // Where OTP UI will be shown
+        success: function (data) {
+          console.log("OTP verified successfully", data);
+          document.getElementById("secure-link").style.display = "block";
+        },
+        failure: function (error) {
+          console.log("OTP verification failed", error);
+          alert("OTP verification failed. Please try again.");
+        }
+      };
+
+      initSendOTP(configuration);
+    }
+  </script>
+</body>
+</html>
